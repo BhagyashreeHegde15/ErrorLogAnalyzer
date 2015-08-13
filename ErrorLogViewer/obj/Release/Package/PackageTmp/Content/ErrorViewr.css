@@ -1,0 +1,45 @@
+﻿.content-section
+{
+    margin-left:100px;
+    margin-right: 100px;
+    min-height: 55em;
+    background-color:rgba(182, 182, 166, 0.19);
+    padding: 20px;
+}
+.banner-bg
+{
+    background: #cec7c7;
+    height: 52px;
+    font-weight: 100;
+    color: #9b5ba4;
+    padding-left: 50px;
+    width: 100%;
+}
+
+.clear-all
+{
+    clear: both;
+}
+
+/*a {
+    margin-left: 30px;
+}*/
+
+.gray-box {
+    background-color: #efee99;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    padding: 5px;
+}
+h4 {
+    color:rgb(23, 46, 157)
+}
+
+.tabStyle {
+    background-color: #CDC1C5;
+}
+.tabStyle a {
+      color: rgb(7, 4, 63) !important;
+    font-weight: 100 !important;
+    font-size: larger;
+}

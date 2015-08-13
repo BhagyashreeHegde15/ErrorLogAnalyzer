@@ -1,0 +1,9 @@
+<Modules>
+  <Module PersistentId="FDA15C9A-9385-422E-BE94-EF10736E6556" ModuleId="ErrorLogViewer" />
+  <Module PersistentId="ServiceStack.Redis, Version=4.0.21.0, Culture=neutral, PublicKeyToken=null" ModuleId="ServiceStack.Redis" />
+  <Module PersistentId="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" ModuleId="mscorlib" />
+  <Module PersistentId="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" ModuleId="System" />
+  <Module PersistentId="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43" ModuleId="ServiceStack.Interfaces" />
+  <Module PersistentId="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" ModuleId="mscorlib_1" />
+  <Module PersistentId="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" ModuleId="System_1" />
+</Modules>

@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Elmah Error Reporter</title>
+    <link href="../Content/ErrorViewr.css" rel="stylesheet" />
+    <link href="../Content/bootstrap.css" rel="stylesheet" />
+
+    <script src="../Scripts/angular.js"></script>
+    <script src="../Scripts/ui-bootstrap-tpls-0.10.0.min.js"></script>
+    <script src="ErrorView.js"></script>
+    <script src="../Scripts/alasql.min.js"></script>
+    <script src="../Scripts/xlsx.js"></script>
+    <script src="../Scripts/underscore.min.js"></script>
+    <script src="../Scripts/jquery-1.7.1.min.js"></script>
+    <script src="../Scripts/bootstrap.js"></script>
+</head>
+<body data-ng-app="ErrorView">
+    <h1 class="row-fluid banner-bg">Elmah Erorr Report
+    </h1>
+    <div class="clear-all"></div>
+     <div role="tabpanel" data-ng-controller="ErrorViewController">
+
+
+  <ul class="nav nav-tabs tabStyle" role="tablist">
+    <li role="presentation" class="active"><a href="#pending" aria-controls="home" role="tab" data-toggle="tab">Pending</a></li>
+    <li role="presentation"><a href="#inProgress" aria-controls="profile" role="tab" data-toggle="tab">In Progress</a></li>
+    <li role="presentation"><a href="#fixed" aria-controls="messages" role="tab" data-toggle="tab">Fixed</a></li>
+   <li class="pull-right"><button data-ng-click="ViewErrorDetail.SaveCommentAndExtractToXML()">Extract to Excel</button></li>
+  </ul>
+
+ 
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="pending"> <div class="content-section">
+        <div class="row-fluid">
+            <div class="span5">
+                <h4>Error</h4>
+            </div>
+            <div class="span2">
+                <h4>Effected User</h4>
+            </div>
+            <div class="span1">
+                <h4>Count</h4>
+            </div>
+            <div class="span2">
+                <h4>Assigned To</h4>
+            </div>
+            <div class="span2">
+                <h4>Status</h4>
+            </div>
+        </div>
+        <div data-ng-repeat="error in ViewErrorDetail.PendingErrors">
+            <div data-ng-init="error.ShowEdit=false"></div>
+            <div class="row-fluid">
+                <div class="span5">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowDetails(error)" data-ng-bind="error.ElmahErrors[0].DetailErrorXml.message.substring(0,75)"></a>
+                </div>
+                <div class="span2">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowUsers(error)" data-ng-bind="error.EffectedUserCount"></a>
+                </div>
+                <div class="span1">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowTime(error)" data-ng-bind="error.Errorcount"></a>
+                </div>
+                <div class="span2">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowAsigned(error)" data-ng-bind="error.ErrorStatus.AssignedTo"></a>
+                </div>
+                <div class="span2">
+                    <div class="dropdown">
+                        <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span data-ng-bind="error.ErrorStatus.Status"></span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <li><a data-ng-click="ViewErrorDetail.SaveErrorStatus(error,'Pending',$index)">Pending</a></li>
+                            <li><a data-ng-click="ViewErrorDetail.SaveErrorStatus(error,'In Progress',$index)">In Progress</a></li>
+                            <li><a data-ng-click="ViewErrorDetail.SaveErrorStatus(error,'Fixed',$index)">Fixed</a></li>
+                        </ul>
+                    </div>
+                </div>                
+            </div>
+            <div class="row-fluid gray-box" data-ng-show="error.ShaowDetails">
+                <div data-ng-bind="error.ElmahErrors[0].DetailErrorXml.detail"></div>
+            </div>
+            <div class="row-fluid" data-ng-show="error.SetShowUsers">
+                <div class="gray-box offset5">
+                    <span>Effected Users: </span>
+                    <br>
+                    <span data-ng-bind="error.EfectedUsers"></span>
+                </div>
+            </div>
+            <div class="row-fluid" data-ng-show="error.SetShowTime">
+                <div class="gray-box offset7">
+                    <span>Occured Time: </span>
+                    <br>
+                    <span data-ng-bind="error.Occuredtime"></span>
+                </div>
+            </div>
+            <div class="row-fluid" data-ng-show="error.ShowEditAssigned">
+                <div class="gray-box offset8">
+                    <input type="text" data-ng-model="error.ErrorStatus.AssignedTo" />
+                    <button data-ng-click="ViewErrorDetail.SaveErrorAssignedTo(error)">OK</button>
+                </div>
+            </div>
+        </div>
+    </div></div>
+    <div role="tabpanel" class="tab-pane" id="inProgress"><div class="content-section">
+        <a href="" style="font-weight: bolder; color: blue;" data-ng-show="ViewErrorDetail.ShowEdit==false" data-ng-click="ViewErrorDetail.ShowEdit=true">Add Comment And Extract to Excel</a>
+        <button data-ng-show="ViewErrorDetail.ShowEdit==true" data-ng-click="ViewErrorDetail.SaveCommentAndExtractToXML()">Extract</button>
+        <div class="row-fluid">
+            <div class="span5">
+                <h4>Error</h4>
+            </div>
+            <div class="span2">
+                <h4>Effected User</h4>
+            </div>
+            <div class="span1">
+                <h4>Count</h4>
+            </div>
+            <div class="span2">
+                <h4>Assigned To</h4>
+            </div>
+            <div class="span2">
+                <h4>Status</h4>
+            </div>
+        </div>
+        <div data-ng-repeat="error in ViewErrorDetail.InProgressErrors">
+            <div data-ng-init="error.ShowEdit=false"></div>
+            <div class="row-fluid">
+                <div class="span5">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowDetails(error)" data-ng-bind="error.ElmahErrors[0].DetailErrorXml.message.substring(0,75)"></a>
+                </div>
+                <div class="span2">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowUsers(error)" data-ng-bind="error.EffectedUserCount"></a>
+                </div>
+                <div class="span1">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowTime(error)" data-ng-bind="error.Errorcount"></a>
+                </div>
+                <div class="span2">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowAsigned(error)" data-ng-bind="error.ErrorStatus.AssignedTo">Add</a>
+                </div>
+                <div class="span2">
+                    <div class="dropdown">
+                        <button id="Button1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span data-ng-bind="error.ErrorStatus.Status"></span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <li><a data-ng-click="ViewErrorDetail.SaveErrorStatus(error,'Pending',$index)">Pending</a></li>
+                            <li><a data-ng-click="ViewErrorDetail.SaveErrorStatus(error,'In Progress',$index)">In Progress</a></li>
+                            <li><a data-ng-click="ViewErrorDetail.SaveErrorStatus(error,'Fixed',$index)">Fixed</a></li>
+                        </ul>
+                    </div>
+                </div>                
+            </div>
+            <div class="row-fluid gray-box" data-ng-show="error.ShaowDetails">
+                <div data-ng-bind="error.ElmahErrors[0].DetailErrorXml.detail"></div>
+            </div>
+            <div class="row-fluid" data-ng-show="error.SetShowUsers">
+                <div class="gray-box offset5">
+                    <span>Effected Users: </span>
+                    <br>
+                    <span data-ng-bind="error.EfectedUsers"></span>
+                </div>
+            </div>
+            <div class="row-fluid" data-ng-show="error.SetShowTime">
+                <div class="gray-box offset7">
+                    <span>Occured Time: </span>
+                    <br>
+                    <span data-ng-bind="error.Occuredtime"></span>
+                </div>
+            </div>
+            <div class="row-fluid" data-ng-show="error.ShowEditAssigned">
+                <div class="gray-box offset8">
+                    <input type="text" data-ng-model="error.ErrorStatus.AssignedTo" />
+                    <button data-ng-click="ViewErrorDetail.SaveErrorAssignedTo(error)">OK</button>
+                </div>
+            </div>
+        </div>
+    </div></div>
+    <div role="tabpanel" class="tab-pane" id="fixed"><div class="content-section">
+        <div class="row-fluid">
+            <div class="span5">
+                <h4>Error</h4>
+            </div>
+            <div class="span2">
+                <h4>Effected User</h4>
+            </div>
+            <div class="span1">
+                <h4>Count</h4>
+            </div>
+            <div class="span2">
+                <h4>Assigned To</h4>
+            </div>
+            <div class="span2">
+                <h4>Status</h4>
+            </div>
+        </div>
+        <div data-ng-repeat="error in ViewErrorDetail.FixedErrors">
+            <div data-ng-init="error.ShowEdit=false"></div>
+            <div class="row-fluid">
+                <div class="span5">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowDetails(error)" data-ng-bind="error.ElmahErrors[0].DetailErrorXml.message.substring(0,75)"></a>
+                </div>
+                <div class="span2">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowUsers(error)" data-ng-bind="error.EffectedUserCount"></a>
+                </div>
+                <div class="span1">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowTime(error)" data-ng-bind="error.Errorcount"></a>
+                </div>
+                <div class="span2">
+                    <a href="" data-ng-click="ViewErrorDetail.SetShowAsigned(error)" data-ng-bind="error.ErrorStatus.AssignedTo">Add</a>
+                </div>
+                <div class="span2">
+                    <div class="dropdown">
+                        <button id="Button2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span data-ng-bind="error.ErrorStatus.Status"></span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <li><a data-ng-click="ViewErrorDetail.SaveErrorStatus(error,'Pending',$index)">Pending</a></li>
+                            <li><a data-ng-click="ViewErrorDetail.SaveErrorStatus(error,'In Progress',$index)">In Progress</a></li>
+                            <li><a data-ng-click="ViewErrorDetail.SaveErrorStatus(error,'Fixed',$index)">Fixed</a></li>
+                        </ul>
+                    </div>
+                </div>                
+            </div>
+            <div class="row-fluid gray-box" data-ng-show="error.ShaowDetails">
+                <div data-ng-bind="error.ElmahErrors[0].DetailErrorXml.detail"></div>
+            </div>
+            <div class="row-fluid" data-ng-show="error.SetShowUsers">
+                <div class="gray-box offset5">
+                    <span>Effected Users: </span>
+                    <br>
+                    <span data-ng-bind="error.EfectedUsers"></span>
+                </div>
+            </div>
+            <div class="row-fluid" data-ng-show="error.SetShowTime">
+                <div class="gray-box offset7">
+                    <span>Occured Time: </span>
+                    <br>
+                    <span data-ng-bind="error.Occuredtime"></span>
+                </div>
+            </div>
+            <div class="row-fluid" data-ng-show="error.ShowEditAssigned">
+                <div class="gray-box offset8">
+                    <input type="text" data-ng-model="error.ErrorStatus.AssignedTo" />
+                    <button data-ng-click="ViewErrorDetail.SaveErrorAssignedTo(error)">OK</button>
+                </div>
+            </div>
+        </div>
+    </div></div>
+  </div>
+
+</div>
+   
+</body>
+</html>
